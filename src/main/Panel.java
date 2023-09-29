@@ -2,11 +2,6 @@ package main;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 
 public class Panel extends JPanel {
     public Panel() {
@@ -14,8 +9,13 @@ public class Panel extends JPanel {
         JTextArea windowRequestBeforeCleaning = new TextArea();
         JTextArea windowRequestAfterCleaning  = new TextArea();
 
-        JButton buttonRequestInsert = new JButton(Launcher.BUTTON_INSERT_TITLE);
-        JButton buttonRequestComplete = new JButton(Launcher.BUTTON_COMPLETE_TITLE);
+        JButton buttonRequestInsert = new Button((TextArea) windowRequestBeforeCleaning,
+                (TextArea) windowRequestAfterCleaning);
+        JButton buttonRequestComplete = new Button((TextArea) windowRequestBeforeCleaning,
+                (TextArea) windowRequestAfterCleaning);
+
+        buttonRequestInsert.setText(Launcher.BUTTON_INSERT_TITLE);
+        buttonRequestComplete.setText(Launcher.BUTTON_COMPLETE_TITLE);
 
         add(buttonRequestInsert);
         add(buttonRequestComplete);
@@ -23,26 +23,7 @@ public class Panel extends JPanel {
         add(new JScrollPane(windowRequestBeforeCleaning));
         add(new JScrollPane(windowRequestAfterCleaning));
 
-        ActionListener insertRequest = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                windowRequestBeforeCleaning.setText(null);
-                windowRequestBeforeCleaning.paste();
-                windowRequestAfterCleaning.setText(null);
-            }
-        };
-        buttonRequestInsert.addActionListener(insertRequest);
-
-        ActionListener cleanRequest = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String request = Launcher.stringClean(windowRequestBeforeCleaning.getText());
-                windowRequestAfterCleaning.setText(request);
-                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                StringSelection stringSelection = new StringSelection(request);
-                clipboard.setContents(stringSelection, null);
-            }
-        };
-        buttonRequestComplete.addActionListener(cleanRequest);
+        buttonRequestInsert.addActionListener(Button.insertRequest);
+        buttonRequestComplete.addActionListener(Button.cleanRequest);
     }
 }
