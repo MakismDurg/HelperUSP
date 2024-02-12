@@ -7,28 +7,29 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Button extends JButton{
-    private static TextArea windowRequestBeforeCleaning;
-    private static TextArea windowRequestAfterCleaning;
+public class RequestButton extends JButton {
+    private static JTextArea windowInput;
+    private static JTextArea windowOutput;
 
-    public Button(TextArea windowRequestBeforeCleaning, TextArea windowRequestAfterCleaning) {
-        Button.windowRequestBeforeCleaning = windowRequestBeforeCleaning;
-        Button.windowRequestAfterCleaning = windowRequestAfterCleaning;
+    public RequestButton(JTextArea windowInput, JTextArea windowOutput) {
+        RequestButton.windowInput = windowInput;
+        RequestButton.windowOutput = windowOutput;
+        setSize(185, 30);
     }
 
     static ActionListener insertRequest = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            windowRequestBeforeCleaning.setText(null);
-            windowRequestBeforeCleaning.paste();
-            windowRequestAfterCleaning.setText(null);
+            windowInput.setText(null);
+            windowInput.paste();
+            windowOutput.setText(null);
         }
     };
     static ActionListener cleanRequest = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String request = Launcher.stringClean(windowRequestBeforeCleaning.getText());
-            windowRequestAfterCleaning.setText(request);
+            String request = Launcher.stringClean(windowInput.getText());
+            windowOutput.setText(request);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             StringSelection stringSelection = new StringSelection(request);
             clipboard.setContents(stringSelection, null);
